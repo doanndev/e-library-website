@@ -1,62 +1,94 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
-import Logo from "@/assets/logo.svg";
-import Search from "@/assets/search.svg";
-import Notification from "@/assets/notification.svg";
+import React, { useState } from 'react';
+import images from '@/configs/images';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [activeLink, setActiveLink] = useState('Home');
 
-  const user = { name: 'John Doe', avatar: '/avatar.png' }; // Giả định user đăng nhập
+  const user = {
+    name: 'John Doe',
+    avatar: images.avata,
+    email: 'johndoe@example.com',
+    phone: '+84 123 456 789'
+  };
+
+  const searchResults = [
+    "The Great Gatsby",
+    "To Kill a Mockingbird",
+    "1984",
+    "Moby Dick",
+    "The Catcher in the Rye"
+  ];
+
+  const filteredResults = searchQuery
+    ? searchResults.filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
 
   return (
-    <div className="flex items-center px-6 py-3 w-[1440px]">
-      {/* Logo */}
+    <div className="flex items-center px-6 py-3 w-full">
       <div className='flex ml-[50px]'>
-       <Logo/>
-       <div className="text-[26px] mt-2 ml-2 font-bold whitespace-nowrap">
-  <span className="text-blue-600">Tee</span>
-  <span className="text-orange-500">'s</span>
-  <span className="text-blue-600"> Library</span>
-</div>
+        <images.logo />
+        <div className="text-[26px] mt-2 ml-2 font-bold whitespace-nowrap">
+          <span className="text-blue-600">Tee</span>
+          <span className="text-orange-500">'s</span>
+          <span className="text-blue-600"> Library</span>
+        </div>
       </div>
-      
-      <ul className="flex ml-[90px] space-x-4 text-gray-700 text-[19px] w-auto ">
-        <li className="font-bold cursor-pointer ">Home</li>
-        <li className="cursor-pointer pl-[26px]">About</li>
-        <li className="cursor-pointer pl-[26px] ">Vision</li>
-        <li className="cursor-pointer pl-[26px]">Contact Us</li>
+
+      <ul className="flex ml-[90px] space-x-4 text-[#00000080] text-[19px] w-auto">
+        {["Home", "About", "Vision", "Contact Us"].map((item) => (
+          <li
+            key={item}
+            className={`cursor-pointer pl-[26px] ${activeLink === item ? "font-bold text-black" : "font-normal"}`}
+            onClick={() => setActiveLink(item)}
+          >
+            {item}
+          </li>
+        ))}
       </ul>
-      
-      {/* Search Bar */}
+
       <div className="relative flex items-center ml-[14px]">
-  <Search className="absolute left-3 w-5 h-5 text-gray-500 mt-1" />
-  <input
-  type="text"
-  placeholder="Search"
-  value={searchQuery}
-  onChange={(e) => {
-    setSearchQuery(e.target.value);
-    setIsSearchOpen(true);
-  }}
-  className="border-2 rounded-lg px-10 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400 h-[43px] w-[340px] text-[#6A6565] placeholder-[#6A6565]"
-/>
+        <images.search className="absolute left-3 w-5 h-5 text-gray-500 mt-1" />
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setIsSearchOpen(true);
+          }}
+          className="border-2 rounded-lg px-10 py-1 focus:outline-none focus:ring-0 h-[43px] w-[340px] text-[#6A6565]"
+        />
+        {isSearchOpen && filteredResults.length > 0 && (
+          <div className="absolute top-12 left-0 w-full bg-white shadow-lg rounded-lg p-2">
+            {filteredResults.map((item, index) => (
+              <div
+                key={index}
+                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                onClick={() => {
+                  setSearchQuery(item);
+                  setIsSearchOpen(false);
+                }}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-</div>
-
-      {/* Icons */}
       <div className="flex items-center space-x-4 cursor-pointer">
         <div className='ml-[27px]'>
-            <Notification />
+          <images.notification />
         </div>
         {isLoggedIn ? (
           <>
-            <span className="text-gray-600 cursor-pointer">🛒</span>
+            <span className="text-gray-600 cursor-pointer ml-[30px]">🛒</span>
             <img
               src={user.avatar}
               alt="Avatar"
@@ -65,27 +97,18 @@ export default function Navbar() {
             />
           </>
         ) : (
-          <div className="flex space-x-2  ml-[20px]">
-            <button className="text-blue-500 font-semibold mr-[30px]">LOGIN</button>
-            <button className="bg-orange-500 text-white px-4 py-1 rounded-md ml-[30px]">Sign Up</button>
+          <div className="flex space-x-2 ml-[20px]">
+            <button className="text-[#5352EDB5] font-semibold mr-[30px]">LOGIN</button>
+            <button className="bg-[#FF7F56] text-white px-4 py-1 rounded-md ml-[30px]">Sign Up</button>
           </div>
         )}
       </div>
 
-      {/* Search Modal */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold">Search Results for "{searchQuery}"</h2>
-            <button onClick={() => setIsSearchOpen(false)} className="mt-3 bg-gray-300 px-3 py-1 rounded">Close</button>
-          </div>
-        </div>
-      )}
-      
-      {/* User Menu Modal */}
       {isUserMenuOpen && (
         <div className="absolute top-12 right-6 bg-white shadow-lg rounded-md p-4 w-48">
           <p className="font-semibold">{user.name}</p>
+          <p className="text-sm text-gray-600">{user.email}</p>
+          <p className="text-sm text-gray-600">{user.phone}</p>
           <button
             onClick={() => {
               setIsLoggedIn(false);
@@ -97,7 +120,6 @@ export default function Navbar() {
           </button>
         </div>
       )}
-      
     </div>
   );
 }
