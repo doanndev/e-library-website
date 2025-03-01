@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+*{
+    font-style: normal;
+    font-family: Roboto;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+  
+  html,body {
+    font-style: normal;
+    font-family: Roboto;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    /* overflow: hidden; */
+    /* background-image: url(./Desktop.png);
+    background-repeat: no-repeat;
+    opacity: .7; */
+  }
