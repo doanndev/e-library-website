@@ -32,7 +32,7 @@ export default function Navbar() {
     : [];
 
   return (
-    <div className="flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 py-3 w-full bg-white shadow-md relative">
+    <div className="flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 py-3 w-full bg-white  relative">
       <div className='flex items-center'>
         <button className="lg:hidden text-2xl mr-4" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
